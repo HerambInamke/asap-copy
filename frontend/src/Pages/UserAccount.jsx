@@ -62,6 +62,12 @@ const UserAccount = () => {
           </div>
           <div className="flex gap-4">
             <Link
+              to="/emoji"
+              className="px-4 py-2 text-primary-purple border border-primary-purple rounded-lg hover:bg-primary-purple hover:text-neutral-white transition-colors"
+            >
+              View All Combos
+            </Link>
+            <Link
               to="/add-emoji"
               className="px-4 py-2 text-neutral-white rounded-lg bg-gradient-to-r from-primary-purple to-primary-pink hover:opacity-90 transition-colors"
             >
@@ -69,7 +75,7 @@ const UserAccount = () => {
             </Link>
             <button
               onClick={handleLogout}
-              className="px-4 py-2 text-primary-purple border border-primary-purple rounded-lg hover:bg-primary-purple hover:text-neutral-white transition-colors"
+              className="px-4 py-2 text-red-500 border border-red-500 rounded-lg hover:bg-red-500 hover:text-neutral-white transition-colors"
             >
               Logout
             </button>

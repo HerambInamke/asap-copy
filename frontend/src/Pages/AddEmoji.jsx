@@ -1,40 +1,26 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
 const AddEmoji = () => {
     const [formData, setFormData] = useState({
         emojis: '',
         description: ''
     });
-    const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        setError('');
 
         try {
-            const response = await fetch('http://localhost:3000/api/emoji-combos', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error || 'Failed to add emoji combination');
-            }
-
-            const result = await response.json();
-            if (result) {
-                navigate('/emoji');
-            }
+            await axios.post('http://localhost:3000/api/emoji-combos', formData);
+            toast.success('Emoji combination added successfully!');
+            navigate('/account');
         } catch (err) {
-            setError(err.message);
+            toast.error(err.response?.data?.error || 'Failed to add emoji combination');
         } finally {
             setLoading(false);
         }
@@ -51,13 +37,13 @@ const AddEmoji = () => {
         <div className="min-h-screen bg-neutral-white flex flex-col items-center py-12 px-4 sm:px-6 lg:px-8">
             <nav className="w-full max-w-md mb-8 flex justify-between items-center">
                 <Link
-                    to="/"
+                    to="/account"
                     className="flex items-center px-4 py-2 text-primary-purple hover:text-opacity-80 transition-colors"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                         <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
                     </svg>
-                    Home
+                    Back to Account
                 </Link>
                 <Link
                     to="/emoji"
@@ -67,7 +53,7 @@ const AddEmoji = () => {
                 </Link>
             </nav>
             
-            <div className="max-w-md w-full bg-neutral-white rounded-xl shadow-lg p-8">
+            <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8">
                 <div className="text-center">
                     <h2 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-primary-purple to-primary-pink">
                         Create New Combination
@@ -111,15 +97,9 @@ const AddEmoji = () => {
                         </div>
                     </div>
 
-                    {error && (
-                        <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md text-sm">
-                            {error}
-                        </div>
-                    )}
-
                     <div className="flex gap-4">
                         <Link
-                            to="/emoji"
+                            to="/account"
                             className="w-1/2 flex justify-center py-2 px-4 border border-primary-purple text-primary-purple rounded-md hover:bg-primary-purple hover:text-neutral-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-purple transition-colors"
                         >
                             Cancel
